@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "liverics — live lyrics for YouTube Music",
+  "version": "0.1.0",
+  "description": "Shows synced lyrics as live, auto-advancing subtitles over YouTube Music.",
+  "host_permissions": [
+    "https://lrclib.net/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://music.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
