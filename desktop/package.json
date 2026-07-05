@@ -1,0 +1,16 @@
+{
+  "name": "liverics-desktop",
+  "version": "0.1.0",
+  "description": "Universal floating lyrics overlay — the display half of liverics.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

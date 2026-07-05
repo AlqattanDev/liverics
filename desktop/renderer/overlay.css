@@ -1,0 +1,51 @@
+/* Transparent window. Only the pill (one line) shows; it fades fully away
+   whenever there's nothing to display, so it never nags you. */
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 18px;
+  box-sizing: border-box;
+}
+
+.liverics {
+  box-sizing: border-box;
+  max-width: 90vw;
+  padding: 14px 30px;
+  border-radius: 20px;
+  background: rgba(10, 10, 12, 0.66);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  backdrop-filter: blur(18px) saturate(1.25);
+  box-shadow: 0 14px 54px rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-family: -apple-system, "SF Pro Display", "YouTube Sans", system-ui,
+    sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+/* No line right now → fade the whole pill out. */
+.liverics[data-empty="1"] {
+  opacity: 0;
+}
+
+.cur {
+  min-height: 1.3em;
+  white-space: pre-wrap;
+}
