@@ -1,0 +1,20 @@
+# deps
+node_modules/
+
+# build output
+dist/
+build/
+out/
+*.asar
+
+# secrets / env
+.env
+.env.*
+auth.json
+*.pem
+*.key
+
+# os / editor
+.DS_Store
+*.log
+npm-debug.log*
