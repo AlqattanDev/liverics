@@ -3,7 +3,7 @@
   "title": "liverics",
   "tagline": "Live lyrics, like subtitles, for the music you're already playing.",
   "kind": "landing",
-  "repo": "",
+  "accent": "#B62AD9",
   "order": 30,
   "hidden": false,
   "tags": ["desktop", "extension", "music", "electron"]

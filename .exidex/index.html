@@ -1,92 +1,76 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="--accent:#B62AD9">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>liverics — live lyrics for whatever's playing</title>
-  <!-- Shared portfolio styling (served by the Mini). Layered ON TOP of the
-       self-contained fallback below, so this page looks right even before
-       style.css exists, and inherits the portfolio look once it does. -->
-  <link rel="stylesheet" href="/_showcase/style.css" />
+  <!-- Minimal fallback FIRST so the shared stylesheet below always wins.
+       Keeps the page readable if /_showcase/style.css is ever unreachable. -->
   <style>
-    /* --- self-contained fallback styling (Ali+Fable's style.css overrides this) --- */
-    :root { color-scheme: light dark; }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      color: #e7e7ea; background: #0d0d10;
-      display: flex; justify-content: center;
-    }
-    .wrap { width: 100%; max-width: 720px; padding: 4rem 1.5rem 6rem; }
-    .kicker { text-transform: uppercase; letter-spacing: .14em; font-size: .72rem; opacity: .55; margin: 0 0 1rem; }
-    h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); line-height: 1.05; margin: 0 0 .6rem; letter-spacing: -.02em; }
-    .tagline { font-size: 1.2rem; opacity: .82; margin: 0 0 2.5rem; }
-    h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: .08em; opacity: .6; margin: 3rem 0 1rem; }
-    p { margin: 0 0 1rem; opacity: .9; }
-    a { color: #7ab8ff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; }
-    th, td { text-align: left; padding: .55rem .7rem; border-bottom: 1px solid #26262c; font-size: .95rem; }
-    th { opacity: .55; font-weight: 600; }
-    ol { padding-left: 1.2rem; }
-    ol li { margin: .35rem 0; }
-    code { background: #1b1b21; padding: .12em .4em; border-radius: 4px; font-size: .88em; }
-    .demo {
-      aspect-ratio: 16/9; width: 100%; margin: 0 0 2rem; border-radius: 12px;
-      background: #16161b; border: 1px dashed #33333c;
-      display: flex; align-items: center; justify-content: center; opacity: .5; font-size: .9rem;
-    }
-    .pills { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 2rem; }
-    .pill { font-size: .78rem; padding: .3rem .7rem; border: 1px solid #2c2c34; border-radius: 999px; opacity: .8; }
-    footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid #26262c; font-size: .85rem; opacity: .5; }
+    body { margin: 0; font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #23251d; background: #e5e7e0; }
+    .sc-window { max-width: 880px; margin: 2rem auto; background: #fdfdf8; }
+    .sc-body { padding: 2rem 1.5rem; }
   </style>
+  <!-- Shared portfolio styling (served by the Mini) -->
+  <link rel="stylesheet" href="/_showcase/style.css" />
 </head>
-<body>
-  <main class="wrap">
-    <p class="kicker">Product · liverics</p>
-    <h1>liverics</h1>
-    <p class="tagline">Live lyrics, like subtitles, for the music you're already playing.</p>
+<body class="sc-desk">
+  <main class="sc-window">
+    <header class="sc-titlebar">
+      <div class="sc-titlebar-dots"><span></span></div>
+      <span class="sc-titlebar-name">liverics.mdx</span>
+      <div class="sc-titlebar-end">
+        <span class="sc-accent-dot" aria-hidden="true"></span>
+        <a class="sc-close" href="https://exidex.dev/" aria-label="Close — back to the desktop">×</a>
+      </div>
+    </header>
 
-    <!-- Demo clip slot — Ali drops a screen recording here (his machine). -->
-    <div class="demo" aria-label="demo placeholder">▶ demo clip goes here</div>
+    <div class="sc-body">
+      <p class="sc-kicker">Product · liverics</p>
+      <h1 class="sc-title">liverics</h1>
+      <p class="sc-tagline">Live lyrics, <span class="sc-marker">like subtitles</span>, for the music you're already playing.</p>
 
-    <div class="pills">
-      <span class="pill">Chromium extension</span>
-      <span class="pill">No backend</span>
-      <span class="pill">Synced lyrics via LRCLIB</span>
+      <!-- Demo clip slot — Ali drops a screen recording here. -->
+      <div class="sc-demo">▶ demo clip goes here</div>
+
+      <div class="sc-pills">
+        <span class="sc-pill">Chromium extension</span>
+        <span class="sc-pill">No backend</span>
+        <span class="sc-pill">Synced lyrics via LRCLIB</span>
+      </div>
+
+      <h2>What it does</h2>
+      <p>
+        liverics detects the song playing and shows its lyrics line-by-line, advancing
+        automatically in time with the music — karaoke-style subtitles for whatever's on.
+        The lyric renderer is one reusable core; different "detectors" feed it the current
+        song and playback position.
+      </p>
+
+      <h2>Modes</h2>
+      <table>
+        <thead><tr><th>Mode</th><th>Source of truth</th><th>Sync</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Linked</strong> (built)</td><td>Extension reads YouTube Music's <code>&lt;video&gt;</code> position</td><td>Millisecond-accurate</td></tr>
+          <tr><td><strong>Listen</strong> (planned)</td><td>Mic fingerprints whatever's playing, any device</td><td>Best-effort</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Install</h2>
+      <p>It's an unpacked Chromium extension (Chrome / Edge / Brave / Arc):</p>
+      <ol>
+        <li>Go to <code>chrome://extensions</code></li>
+        <li>Turn on <strong>Developer mode</strong> (top-right)</li>
+        <li>Click <strong>Load unpacked</strong> and select the <code>extension/</code> folder</li>
+        <li>Open <a href="https://music.youtube.com">music.youtube.com</a> and play a song</li>
+      </ol>
+      <p>The overlay appears near the bottom and follows along. Hit <strong>×</strong> to hide it.</p>
+
+      <footer class="sc-footer">
+        Live lyrics from <a href="https://lrclib.net">LRCLIB</a> · best-effort title + duration matching ·
+        Chromium only for now.
+      </footer>
     </div>
-
-    <h2>What it does</h2>
-    <p>
-      liverics detects the song playing and shows its lyrics line-by-line, advancing
-      automatically in time with the music — karaoke-style subtitles for whatever's on.
-      The lyric renderer is one reusable core; different "detectors" feed it the current
-      song and playback position.
-    </p>
-
-    <h2>Modes</h2>
-    <table>
-      <thead><tr><th>Mode</th><th>Source of truth</th><th>Sync</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Linked</strong> (built)</td><td>Extension reads YouTube Music's <code>&lt;video&gt;</code> position</td><td>Millisecond-accurate</td></tr>
-        <tr><td><strong>Listen</strong> (planned)</td><td>Mic fingerprints whatever's playing, any device</td><td>Best-effort</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Install</h2>
-    <p>It's an unpacked Chromium extension (Chrome / Edge / Brave / Arc):</p>
-    <ol>
-      <li>Go to <code>chrome://extensions</code></li>
-      <li>Turn on <strong>Developer mode</strong> (top-right)</li>
-      <li>Click <strong>Load unpacked</strong> and select the <code>extension/</code> folder</li>
-      <li>Open <a href="https://music.youtube.com">music.youtube.com</a> and play a song</li>
-    </ol>
-    <p>The overlay appears near the bottom and follows along. Hit <strong>×</strong> to hide it.</p>
-
-    <footer>
-      Live lyrics from <a href="https://lrclib.net">LRCLIB</a> · best-effort title + duration matching ·
-      Chromium only for now.
-    </footer>
   </main>
 </body>
 </html>
