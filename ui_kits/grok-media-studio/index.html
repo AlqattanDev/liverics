@@ -1,0 +1,1236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grok Media Studio — UI Kit</title>
+    <style>
+/* ============================ colors_and_type.css ============================ */
+/* =============================================================================
+   GROK MEDIA STUDIO — COLOR & TYPE FOUNDATIONS
+   xAI-inspired local media console: near-black canvas, white-first monochrome,
+   pill actions, 8px dark cards, hairline borders, mono technical labels.
+   Source of truth: grok-media-gallery/DESIGN.md + src/styles.css
+   ============================================================================= */
+
+/* ---- Webfonts -------------------------------------------------------------
+   DESIGN.md aspires to xAI's proprietary "Universal Sans" + "Geist Mono".
+   Universal Sans is not publicly available; the design system's OWN documented
+   fallback is Inter, so we ship Inter for UI/body. Geist Mono IS public and is
+   used verbatim for the mono technical labels. Swap Inter -> Universal Sans if
+   you ever license it. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
+
+:root {
+    color-scheme: dark;
+
+    /* ---- BRAND / PRIMARY --------------------------------------------------- */
+    --primary: #ffffff;          /* filled primary pill (Generate), active text */
+    --primary-pressed: #dadbdf;  /* pressed primary */
+    --on-primary: #0a0a0a;       /* text/icon on a white pill */
+
+    /* ---- TEXT (INK SCALE) -------------------------------------------------- */
+    --ink: #ffffff;              /* titles, active control text */
+    --ink-soft: #fafaf7;         /* hover ink */
+    --body: #dadbdf;             /* normal copy, input text */
+    --body-mid: #8b9098;         /* secondary copy / counts (a.k.a. ash) */
+    --mute: #7d8187;             /* metadata, placeholders */
+
+    /* ---- SURFACES (NEAR-BLACK CANVAS) -------------------------------------- */
+    --canvas: #0a0a0a;           /* page background + structural bars */
+    --surface-soft: #0a0a0a;     /* input fill / subtle nested surface */
+    --surface-card: #191919;     /* composer panels, prompt box, tiles (level 1) */
+    --surface-elevated: #1a1c20; /* hover surface */
+    --surface-dark: #050505;     /* deepest scrim */
+    --canvas-raised: #202126;    /* menus / popovers / preview (level 2) */
+
+    /* ---- BORDERS / HAIRLINES ----------------------------------------------- */
+    --hairline: #212327;         /* default border + divider */
+    --hairline-strong: #30343a;  /* focused / selected neutral border (stone) */
+    --stone: #30343a;
+
+    /* ---- SEMANTIC ---------------------------------------------------------- */
+    --success: #23d18b;
+    --success-soft: rgba(35, 209, 139, 0.12);
+    --warning: #ffb020;
+    --warning-soft: rgba(255, 176, 32, 0.12);
+    --danger: #ff4d4f;
+    --danger-soft: rgba(255, 77, 79, 0.13);
+    --focus: #a0c3ec;            /* keyboard focus ring (breeze blue) */
+
+    /* ---- ACCENTS (USE SPARINGLY, NEVER DECORATIVE) ------------------------- */
+    --accent-sunset: #ff7a17;    /* SOLE cost / quota-attention accent */
+    --accent-dusk: #7c3aed;      /* rare: distinct non-generation action */
+    --accent-breeze: #a0c3ec;    /* focus + diagnostic/info */
+
+    /* ---- GLASS (sticky bars / docks) --------------------------------------- */
+    --glass-bg: color-mix(in srgb, var(--canvas) 80%, transparent);
+    --glass-border: color-mix(in srgb, var(--hairline) 60%, transparent);
+
+    /* ---- TYPE FAMILIES ----------------------------------------------------- */
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+
+    /* ---- TYPE SCALE (token : size / weight / line-height / tracking) ------- */
+    --display-sm-size: 28px;  --display-sm-weight: 400; --display-sm-lh: 34px; --display-sm-ls: -0.4px;
+    --title-md-size: 20px;    --title-md-weight: 500;   --title-md-lh: 28px;   --title-md-ls: -0.2px;
+    --body-md-size: 15px;     --body-md-weight: 400;    --body-md-lh: 22px;    --body-md-ls: 0;
+    --body-sm-size: 14px;     --body-sm-weight: 400;    --body-sm-lh: 20px;    --body-sm-ls: 0;
+    --caption-size: 12px;     --caption-weight: 500;    --caption-lh: 16px;    --caption-ls: 1.1px;
+    --caption-sm-size: 11px;  --caption-sm-weight: 500; --caption-sm-lh: 14px; --caption-sm-ls: 1px;
+    --button-size: 14px;      --button-weight: 500;     --button-lh: 20px;     --button-ls: 0;
+
+    /* ---- RADII ------------------------------------------------------------- */
+    --radius-none: 0px;
+    --radius-md: 8px;    /* panels, prompt box, tiles, inputs */
+    --radius-lg: 12px;   /* large dialogs / preview shells only */
+    --radius-full: 9999px; /* buttons, chips, pills, segmented controls */
+
+    /* ---- SPACING (8px grid) ------------------------------------------------ */
+    --space-xxs: 2px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+    --space-3xl: 48px;
+}
+
+/* Light theme override (the app ships a light mode; depth still from contrast). */
+:root[data-theme="light"] {
+    color-scheme: light;
+    --primary: #0a0a0a;
+    --primary-pressed: #25282d;
+    --on-primary: #ffffff;
+    --ink: #0a0a0a;
+    --ink-soft: #191919;
+    --body: #25282d;
+    --body-mid: #858b94;
+    --mute: #626873;
+    --canvas: #ffffff;
+    --surface-soft: #f5f6f8;
+    --surface-card: #ffffff;
+    --surface-elevated: #f2f3f5;
+    --surface-dark: #0a0a0a;
+    --canvas-raised: #ffffff;
+    --hairline: #d9dde3;
+    --hairline-strong: #d9dde3;
+    --stone: #d9dde3;
+    --accent-sunset: #d65f0a;
+    --glass-bg: color-mix(in srgb, var(--canvas) 92%, transparent);
+    --glass-border: color-mix(in srgb, var(--hairline) 50%, transparent);
+}
+
+/* =============================================================================
+   SEMANTIC TYPE CLASSES
+   ============================================================================= */
+.ds-display { font-family: var(--font-sans); font-size: var(--display-sm-size); font-weight: var(--display-sm-weight); line-height: var(--display-sm-lh); letter-spacing: var(--display-sm-ls); color: var(--ink); }
+.ds-title   { font-family: var(--font-sans); font-size: var(--title-md-size); font-weight: var(--title-md-weight); line-height: var(--title-md-lh); letter-spacing: var(--title-md-ls); color: var(--ink); }
+.ds-body    { font-family: var(--font-sans); font-size: var(--body-md-size); font-weight: var(--body-md-weight); line-height: var(--body-md-lh); color: var(--body); }
+.ds-body-sm { font-family: var(--font-sans); font-size: var(--body-sm-size); font-weight: var(--body-sm-weight); line-height: var(--body-sm-lh); color: var(--body); }
+.ds-button  { font-family: var(--font-sans); font-size: var(--button-size); font-weight: var(--button-weight); line-height: var(--button-lh); }
+
+/* Mono technical labels — the signature scannable uppercase caption. */
+.ds-label {
+    font-family: var(--font-mono);
+    font-size: var(--caption-size);
+    font-weight: var(--caption-weight);
+    line-height: var(--caption-lh);
+    letter-spacing: var(--caption-ls);
+    text-transform: uppercase;
+    color: var(--mute);
+}
+.ds-label-sm {
+    font-family: var(--font-mono);
+    font-size: var(--caption-sm-size);
+    font-weight: var(--caption-sm-weight);
+    line-height: var(--caption-sm-lh);
+    letter-spacing: var(--caption-sm-ls);
+    text-transform: uppercase;
+    color: var(--mute);
+}
+
+/* ============================ styles.css ============================ */
+/* =============================================================================
+   GROK MEDIA STUDIO — UI KIT STYLES
+   Tokens are inlined above (was: ../../colors_and_type.css). Class vocabulary
+   mirrors the source app (src/styles.css); the .dock* classes are the enhanced
+   sticky composer built for this system.
+   ============================================================================= */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--canvas);
+    color: var(--body);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+
+.app { max-width: 1320px; margin: 0 auto; padding: 0 24px 96px; }
+
+/* ---- Buttons / pills ------------------------------------------------------ */
+button {
+    min-height: 40px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-full);
+    background: var(--canvas);
+    color: var(--ink);
+    padding: 7px 14px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 14px; font-weight: 500; line-height: 20px;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+button:hover { border-color: var(--stone); background: var(--surface-elevated); color: var(--ink); }
+button:active { background: var(--stone); }
+button:disabled { color: var(--body-mid); border-color: var(--hairline); background: var(--canvas); cursor: not-allowed; opacity: .7; }
+button.primary { background: var(--primary); color: var(--on-primary); border-color: var(--primary); font-weight: 600; }
+button.primary:hover, button.primary:active { background: var(--primary-pressed); color: var(--on-primary); }
+button.icon-only { width: 40px; height: 40px; padding: 0; }
+button:focus-visible, [role="button"]:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--focus); outline-offset: 2px;
+}
+
+/* ---- Mono label ----------------------------------------------------------- */
+.label {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--mute);
+}
+
+/* =============================================================================
+   TOP BAR
+   ============================================================================= */
+.hero {
+    position: sticky; top: 0; z-index: 50;
+    min-height: 72px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    padding: 14px 0;
+    background: color-mix(in srgb, var(--canvas) 92%, transparent);
+    border-bottom: 1px solid var(--hairline);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.heroTitle { min-width: 0; }
+.heroWordmark { font-size: 20px; font-weight: 600; letter-spacing: -0.2px; color: var(--ink); }
+.heroSub { color: var(--mute); font-size: 12px; margin-top: 2px; }
+.heroActions { display: flex; align-items: center; gap: 8px; }
+
+.barPill {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: 36px; padding: 6px 12px;
+    border: 1px solid var(--hairline); border-radius: var(--radius-full);
+    background: var(--canvas); color: var(--body);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em; line-height: 1; cursor: pointer;
+}
+.barPill:hover { color: var(--ink); border-color: var(--stone); background: var(--surface-card); }
+.barPill .statusDot { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--success); }
+.barPillLabel { text-transform: uppercase; color: var(--ink); }
+
+.usageWidget {
+    display: flex; align-items: center; gap: 10px;
+    min-height: 42px; padding: 5px 14px;
+    border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+    background: var(--glass-bg); backdrop-filter: blur(16px);
+    cursor: pointer;
+}
+.usageWidget:hover { border-color: var(--hairline); }
+.usageCost { display: flex; flex-direction: column; line-height: 1.15; gap: 1px; }
+.usageCostLabel { color: var(--mute); font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+.usageCostValue { font-size: 17px; font-weight: 700; color: var(--accent-sunset); letter-spacing: -0.02em; font-family: var(--font-mono); white-space: nowrap; }
+.usageDivider { width: 1px; align-self: stretch; margin: 4px 0; background: var(--hairline); }
+.usageOutputs { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; gap: 1px; }
+.usageOutputsValue { font-size: 15px; font-weight: 600; color: var(--ink); font-family: var(--font-mono); }
+.usageOutputsLabel { color: var(--mute); font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+
+/* =============================================================================
+   FULL COMPOSER
+   ============================================================================= */
+.panel {
+    background: var(--surface-card); border: 1px solid var(--hairline);
+    border-radius: var(--radius-md); padding: 24px;
+}
+.composer { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+
+.composerHeader { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.modeSelector {
+    display: inline-flex; gap: 4px; padding: 4px;
+    border: 1px solid var(--hairline); border-radius: var(--radius-full); background: var(--canvas);
+}
+.modeChip {
+    min-height: 36px; background: transparent; border-color: transparent;
+    color: var(--body); padding: 8px 16px; gap: 7px;
+}
+.modeChip:hover { background: var(--surface-elevated); }
+.modeChip.active { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+.modeChip.active:hover { background: var(--ink); }
+
+.modeNotice {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 5px 6px 5px 14px; border: 1px solid var(--stone);
+    border-radius: var(--radius-full); background: var(--surface-card);
+}
+.modeNoticeLabel { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.modeExit { min-height: 30px; padding: 4px 10px; font-size: 12px; gap: 5px; }
+
+/* Settings strip */
+.settingsStrip {
+    border: 1px solid var(--hairline); border-radius: var(--radius-md);
+    background: var(--surface-card); padding: 16px;
+    display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;
+}
+.settingsGroup { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.settingsGroup > .label { padding-left: 2px; }
+
+.chipList { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+    min-height: 36px; border-radius: var(--radius-full); background: var(--canvas);
+    color: var(--body); padding: 8px 16px; font-size: 14px; font-weight: 500;
+    border: 1px solid var(--hairline); transition: all 120ms ease;
+}
+.chip:hover { background: var(--surface-elevated); color: var(--ink); }
+.chip.active { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+
+.chipSelect {
+    min-height: 36px; min-width: 92px; border-radius: var(--radius-full);
+    border: 1px solid var(--hairline); background: var(--canvas); color: var(--body);
+    padding: 6px 14px; font-size: 14px; font-weight: 500; font-family: var(--font-sans); cursor: pointer;
+}
+.chipSelect.active { border-color: var(--ink); background: var(--ink); color: var(--canvas); }
+
+.segmented {
+    display: inline-flex; background: var(--canvas); border: 1px solid var(--hairline);
+    border-radius: var(--radius-full); padding: 4px; gap: 4px; width: max-content;
+}
+.segmented button {
+    min-height: 32px; padding: 4px 12px; border-radius: var(--radius-full);
+    border: 0; background: transparent; color: var(--mute); font-size: 13px; font-weight: 500;
+}
+.segmented button:hover { background: var(--surface-elevated); color: var(--ink); }
+.segmented button.active { background: var(--ink); color: var(--canvas); }
+
+.durationStepper {
+    display: inline-grid; grid-template-columns: 42px minmax(64px, 1fr) 42px;
+    width: 168px; gap: 4px; border: 1px solid var(--hairline);
+    border-radius: var(--radius-full); background: var(--canvas); padding: 4px;
+}
+.durationStepper button { width: 42px; min-height: 32px; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--mute); padding: 0; font-size: 18px; }
+.durationStepper button:hover:not(:disabled) { background: var(--ink); color: var(--canvas); }
+.durationStepper output { display: inline-flex; min-height: 32px; align-items: center; justify-content: center; border-radius: var(--radius-full); background: var(--ink); color: var(--canvas); font-size: 14px; font-weight: 600; font-family: var(--font-mono); }
+
+/* Prompt panel */
+.promptPanel {
+    border: 1px solid var(--hairline); border-radius: var(--radius-md);
+    background: var(--surface-card); display: flex; flex-direction: column;
+}
+.promptPanel.drag-active { outline: 2px dashed var(--primary); outline-offset: 4px; }
+.promptLabelRow { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 0; }
+.promptHint { color: var(--mute); font-size: 12px; font-family: var(--font-mono); }
+.promptShell { position: relative; }
+.promptPanel textarea {
+    width: 100%; min-height: 150px; resize: vertical; border: 0; background: transparent;
+    padding: 14px 16px; color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.5;
+}
+.promptPanel textarea::placeholder { color: var(--mute); }
+.promptPanel textarea:focus { outline: none; }
+.promptShell.hasRefs textarea { padding-bottom: 88px; }
+
+.referenceList { position: absolute; left: 12px; right: 16px; bottom: 12px; pointer-events: none; }
+.referenceRail { display: flex; gap: 7px; overflow-x: auto; pointer-events: auto; scrollbar-width: none; }
+.referenceRail::-webkit-scrollbar { display: none; }
+.referenceTile {
+    position: relative; flex: 0 0 64px; height: 64px; border: 1px solid var(--hairline);
+    border-radius: var(--radius-md); background: var(--canvas); overflow: hidden; cursor: pointer;
+}
+.referenceTile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.referenceOrdinal {
+    position: absolute; top: 4px; left: 4px; z-index: 2; padding: 1px 6px;
+    border-radius: var(--radius-full); background: color-mix(in srgb, var(--surface-dark) 82%, transparent);
+    color: #fff; font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+}
+.referenceRemove {
+    position: absolute; top: 4px; right: 4px; z-index: 3; width: 22px; height: 22px; min-height: 22px;
+    padding: 0; border-radius: var(--radius-full); background: color-mix(in srgb, var(--canvas) 88%, transparent);
+    color: var(--ink); opacity: 0; transition: opacity 160ms ease; backdrop-filter: blur(8px);
+}
+.referenceTile:hover .referenceRemove { opacity: 1; }
+
+.promptToolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; border-top: 1px solid var(--hairline); flex-wrap: wrap;
+}
+.promptToolbarLeft { display: flex; align-items: center; gap: 8px; position: relative; }
+.promptToolbarRight { display: flex; align-items: center; gap: 12px; }
+.attachButton { gap: 7px; }
+.attachButton span { color: var(--mute); font-size: 12px; font-family: var(--font-mono); }
+.costHint { color: var(--mute); font-size: 12px; font-family: var(--font-mono); white-space: nowrap; }
+.costHint b { color: var(--accent-sunset); font-weight: 600; }
+.generateButton { gap: 7px; padding: 9px 20px; }
+
+/* Reference library popover */
+.referenceLibrary {
+    position: absolute; bottom: calc(100% + 8px); left: 0; z-index: 80;
+    width: min(440px, calc(100vw - 48px)); display: flex; flex-direction: column; gap: 8px;
+    border: 1px solid var(--hairline); border-radius: var(--radius-md);
+    background: var(--canvas-raised); padding: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35); animation: fadeInUp 160ms ease both;
+}
+.referenceLibraryTop { display: flex; align-items: center; justify-content: space-between; }
+.referenceLibraryTop strong { color: var(--ink); font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; }
+.savedGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; max-height: 320px; overflow: auto; }
+.savedTile { display: flex; flex-direction: column; gap: 6px; padding: 6px; border: 1px solid var(--hairline); border-radius: var(--radius-md); background: var(--canvas); cursor: pointer; text-align: left; }
+.savedTile:hover { border-color: var(--stone); }
+.savedTile.disabled { opacity: 0.45; cursor: not-allowed; }
+.savedTile .thumb { aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: var(--surface-card); }
+.savedTile .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.savedTile .nm { font-size: 11px; color: var(--body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.savedTile .mt { font-size: 10px; color: var(--mute); font-family: var(--font-mono); text-transform: uppercase; }
+
+/* =============================================================================
+   ENHANCED STICKY COMPOSER (the dock)
+   Carries the full composer state forward instead of collapsing to a stub.
+   ============================================================================= */
+.dock {
+    position: fixed; top: 80px; left: 0; right: 0; z-index: 49;
+    max-width: 1320px; margin: 0 auto; padding: 0 24px;
+    pointer-events: none;
+}
+.dockBar {
+    pointer-events: auto;
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--glass-border); border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--canvas) 90%, transparent);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 16px 40px -20px rgba(0,0,0,0.7);
+    opacity: 0; transform: translateY(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.dock.visible .dockBar { opacity: 1; transform: translateY(0); }
+.dock:not(.visible) .dockBar { pointer-events: none; }
+
+/* compact icon-only mode segmented */
+.dockModes { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--hairline); border-radius: var(--radius-full); background: var(--canvas); flex: 0 0 auto; }
+.dockMode { width: 34px; height: 34px; min-height: 34px; padding: 0; background: transparent; border-color: transparent; color: var(--mute); }
+.dockMode:hover { background: var(--surface-elevated); color: var(--ink); }
+.dockMode.active { background: var(--ink); color: var(--canvas); }
+
+/* reference mini-thumbs carried forward */
+.dockRefs { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+.dockRefThumb { position: relative; width: 32px; height: 32px; border-radius: 7px; overflow: hidden; border: 1px solid var(--hairline); }
+.dockRefThumb img { width: 100%; height: 100%; object-fit: cover; }
+.dockRefThumb .ord { position: absolute; left: 2px; top: 2px; font-family: var(--font-mono); font-size: 8px; font-weight: 700; color: #fff; background: color-mix(in srgb, var(--surface-dark) 82%, transparent); padding: 0 3px; border-radius: 5px; }
+.dockRefMore { font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--mute); padding: 0 4px; }
+
+/* prompt input */
+.dockField { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; }
+.dockInput {
+    width: 100%; height: 38px; padding: 0 16px;
+    border: 1px solid var(--hairline); border-radius: var(--radius-full);
+    background: var(--surface-soft); color: var(--ink);
+    font-family: var(--font-sans); font-size: 14px;
+}
+.dockInput::placeholder { color: var(--mute); }
+.dockInput:focus { outline: none; border-color: var(--ink); }
+
+/* the settings SUMMARY chip — shows the live config, opens full controls */
+.dockSummary {
+    flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px;
+    min-height: 38px; padding: 0 12px; white-space: nowrap;
+    border: 1px solid var(--hairline); border-radius: var(--radius-full);
+    background: var(--surface-card); color: var(--body); cursor: pointer;
+    font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+    transition: border-color 160ms ease, color 160ms ease;
+}
+.dockSummary .summaryFull { display: inline-flex; align-items: center; white-space: nowrap; }
+.dockSummary:hover, .dockSummary[aria-expanded="true"] { border-color: var(--stone); color: var(--ink); }
+.dockSummary .sep { color: var(--hairline-strong); }
+.dockSummary .val { color: var(--ink); }
+.dockSummary svg { color: var(--mute); }
+
+/* estimated usage mini */
+.dockUsage { flex: 0 0 auto; display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.05; padding: 0 4px; }
+.dockUsageVal { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--accent-sunset); }
+.dockUsageLabel { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); }
+
+.dockGenerate { flex: 0 0 auto; min-height: 38px; white-space: nowrap; padding: 0 18px; gap: 6px; }
+.dockExpand { flex: 0 0 auto; width: 38px; height: 38px; min-height: 38px; padding: 0; color: var(--mute); }
+
+/* settings popover anchored to the summary chip */
+.dockSettingsPop {
+    position: absolute; top: calc(100% + 10px); right: 24px; z-index: 60;
+    width: min(560px, calc(100vw - 48px));
+    display: flex; flex-direction: column; gap: 16px;
+    border: 1px solid var(--hairline); border-radius: var(--radius-lg);
+    background: var(--canvas-raised); padding: 18px;
+    box-shadow: 0 12px 40px -8px rgba(0,0,0,0.6); animation: fadeInUp 160ms ease both;
+    pointer-events: auto;
+}
+.dockSettingsPop .popHeader { display: flex; align-items: center; justify-content: space-between; }
+.dockSettingsPop .popHeader strong { color: var(--ink); font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; }
+.dockSettingsGrid { display: flex; flex-direction: column; gap: 16px; }
+
+/* =============================================================================
+   QUEUE / JOB
+   ============================================================================= */
+.queuePanel { border: 1px solid var(--hairline); border-radius: var(--radius-md); background: var(--surface-card); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.queueHeader { display: flex; align-items: center; justify-content: space-between; }
+.queueHeader h2 { color: var(--ink); font-size: 14px; font-weight: 600; }
+.queueHeader span { color: var(--mute); font-size: 12px; font-family: var(--font-mono); }
+.queueJob { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--hairline); border-radius: var(--radius-md); background: var(--canvas); }
+.queueJob.running { border-color: color-mix(in srgb, var(--accent-breeze) 30%, var(--hairline)); }
+.queueJobTitle { display: flex; align-items: center; gap: 8px; }
+.queueKind { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mute); border: 1px solid var(--hairline); border-radius: var(--radius-full); padding: 2px 8px; }
+.queueJobTitle strong { color: var(--ink); font-size: 13px; font-weight: 500; }
+.queueJobMeta { display: flex; align-items: center; gap: 10px; color: var(--mute); font-size: 12px; font-family: var(--font-mono); }
+.spinner { width: 14px; height: 14px; border: 2px solid var(--hairline); border-top-color: var(--ink); border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+/* =============================================================================
+   GALLERY
+   ============================================================================= */
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; flex-wrap: wrap; }
+.toolbarFilters { display: flex; align-items: center; gap: 12px; }
+.toolbarLabel { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mute); }
+.tabGroup { display: inline-flex; gap: 6px; }
+.tabBtn { min-height: 36px; padding: 8px 14px; }
+.tabBtn.active { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+.countPill { font-family: var(--font-mono); font-size: 13px; color: var(--ink); }
+.countPill small { color: var(--mute); margin-left: 4px; }
+.toolbarRight { display: flex; align-items: center; gap: 12px; }
+.searchInput { min-height: 40px; width: 280px; max-width: 40vw; border: 1px solid var(--hairline); border-radius: var(--radius-full); background: var(--canvas); color: var(--ink); padding: 0 16px; font-size: 14px; font-family: var(--font-sans); }
+.searchInput::placeholder { color: var(--mute); }
+.searchInput:focus { outline: none; border-color: var(--ink); }
+
+.galleryGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.mediaTile { position: relative; border: 1px solid var(--hairline); border-radius: var(--radius-md); background: var(--surface-card); overflow: hidden; cursor: pointer; }
+.mediaTile:hover { border-color: var(--stone); }
+.mediaTile .media { width: 100%; display: block; aspect-ratio: var(--ar, 1); object-fit: cover; }
+.mediaTile.placeholder .media { display: grid; place-items: center; color: var(--hairline-strong); background: linear-gradient(135deg, #161616, #1d1d1d); }
+.mediaKindBadge { position: absolute; top: 8px; left: 8px; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--surface-dark) 70%, transparent); color: #fff; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; backdrop-filter: blur(8px); }
+.mediaCaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 10px 8px; background: linear-gradient(to top, rgba(0,0,0,0.82), transparent); color: var(--body); font-size: 11px; opacity: 0; transition: opacity 160ms ease; }
+.mediaTile:hover .mediaCaption { opacity: 1; }
+.mediaCaption span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mediaCaption .ratio { font-family: var(--font-mono); color: var(--mute); margin-top: 2px; }
+
+/* =============================================================================
+   ANIMATIONS
+   ============================================================================= */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* sticky-active sparkle ping on generate */
+.generateButton.sparkle, .dockGenerate.sparkle { animation: pulseGlow 1.2s ease 2; }
+@keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 transparent; } 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent); } }
+
+/* ---- responsive ----------------------------------------------------------- */
+@media (max-width: 900px) {
+    .dockSummary .summaryFull { display: none; }
+    .settingsStrip { gap: 16px; }
+    .searchInput { width: 100%; }
+    .toolbarRight { width: 100%; }
+}
+@media (max-width: 680px) {
+    .dockRefs, .dockUsage { display: none; }
+    .modeChip span { display: none; }
+}
+    </style>
+    <!-- Production React/ReactDOM, vendored locally. No Babel: the components are
+         plain React.createElement, not JSX, so no in-browser transpile step. -->
+    <script src="vendor/react.production.min.js"></script>
+    <script src="vendor/react-dom.production.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Icons.jsx -->
+    <script>
+/* Grok Media Studio — Lucide icon set, reproduced inline exactly as the codebase
+   does (24x24, currentColor stroke, width 2, round caps). Monochrome, inherits
+   text color. Exposed on window for cross-file use. */
+const { createElement: h } = React;
+
+function svg(size, children) {
+  return h(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: 2,
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+    },
+    ...children
+  );
+}
+const p = (d) => h("path", { d });
+
+const Icon = {
+  Image: ({ size = 16 }) =>
+    svg(size, [
+      h("rect", { key: "r", width: 18, height: 18, x: 3, y: 3, rx: 3 }),
+      h("circle", { key: "c", cx: 9, cy: 9, r: 2 }),
+      h("path", { key: "p", d: "m21 15-3.5-3.5a2 2 0 0 0-2.8 0L7 19" }),
+    ]),
+  Play: ({ size = 16 }) => svg(size, [p("M8 5v14l11-7Z")]),
+  Sparkles: ({ size = 16 }) =>
+    svg(size, [
+      p(
+        "m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+      ),
+    ]),
+  Link: ({ size = 16 }) =>
+    svg(size, [
+      p("M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"),
+      p("M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"),
+    ]),
+  Upload: ({ size = 16 }) =>
+    svg(size, [p("M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12")]),
+  Plus: ({ size = 16 }) => svg(size, [p("M12 5v14M5 12h14")]),
+  X: ({ size = 16 }) => svg(size, [p("M18 6 6 18M6 6l12 12")]),
+  ChevronDown: ({ size = 16 }) => svg(size, [p("m6 9 6 6 6-6")]),
+  ChevronUp: ({ size = 16 }) => svg(size, [p("m18 15-6-6-6 6")]),
+  Eye: ({ size = 16 }) =>
+    svg(size, [
+      p("M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"),
+      h("circle", { key: "c", cx: 12, cy: 12, r: 3 }),
+    ]),
+  Refresh: ({ size = 16 }) =>
+    svg(size, [
+      p("M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"),
+      p("M3 3v5h5M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"),
+      p("M16 16h5v5"),
+    ]),
+  Trash: ({ size = 16 }) =>
+    svg(size, [p("M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6")]),
+  More: ({ size = 16 }) =>
+    svg(size, [
+      h("circle", { key: "a", cx: 12, cy: 12, r: 1 }),
+      h("circle", { key: "b", cx: 19, cy: 12, r: 1 }),
+      h("circle", { key: "c", cx: 5, cy: 12, r: 1 }),
+    ]),
+  Sun: ({ size = 16 }) =>
+    svg(size, [
+      h("circle", { key: "c", cx: 12, cy: 12, r: 4 }),
+      p("M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"),
+    ]),
+  Moon: ({ size = 16 }) => svg(size, [p("M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 7 7 0 1 0 20.5 14.5Z")]),
+  Clapperboard: ({ size = 16 }) =>
+    svg(size, [
+      p("M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"),
+      p("m6.2 5.3 3.1 3.9M12.4 3.4l3.1 4M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"),
+    ]),
+  Sliders: ({ size = 16 }) =>
+    svg(size, [p("M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6")]),
+  Check: ({ size = 16 }) => svg(size, [p("M20 6 9 17l-5-5")]),
+};
+
+Object.assign(window, { Icon, modeIcon: (m) => {
+  if (m === "image") return h(Icon.Image, { size: 14 });
+  if (m === "image-to-video") return h(Icon.Sparkles, { size: 14 });
+  if (m === "reference-to-video") return h(Icon.Link, { size: 14 });
+  if (m === "edit-video" || m === "extend-video") return h(Icon.Clapperboard, { size: 14 });
+  return h(Icon.Play, { size: 14 });
+}});
+
+    </script>
+    <!-- SettingsControls.jsx -->
+    <script>
+/* Shared generation-settings controls. Rendered both in the full composer's
+   settings strip AND inside the sticky dock's settings popover, so the docked
+   composer exposes the exact same configuration the full one does. */
+const { createElement: e2 } = React;
+
+const ASPECTS = ["auto", "16:9", "1:1", "9:16", "4:3", "3:4", "2:3", "3:2", "2:1", "1:2"];
+const ASPECTS_MORE = ["19.5:9", "9:19.5", "20:9", "9:20"];
+const VIDEO_ASPECTS = ["16:9", "9:16", "1:1", "4:3", "3:4", "3:2", "2:3"];
+const IMAGE_MODELS = [
+  { id: "grok-imagine-image", label: "Normal" },
+  { id: "grok-imagine-image-quality", label: "Quality" },
+];
+
+function Group({ label, children }) {
+  return e2("div", { className: "settingsGroup" },
+    e2("span", { className: "label" }, label),
+    children
+  );
+}
+
+function Segmented({ options, value, onChange }) {
+  return e2("div", { className: "segmented", role: "group" },
+    options.map((o) =>
+      e2("button", {
+        key: o.id ?? o,
+        type: "button",
+        className: value === (o.id ?? o) ? "active" : "",
+        "aria-pressed": value === (o.id ?? o),
+        onClick: () => onChange(o.id ?? o),
+      }, o.label ?? o)
+    )
+  );
+}
+
+/* The full set of generation controls, mode-aware. */
+function SettingsControls({ state, set }) {
+  const { mode, aspectRatio, imageModel, resolution, videoResolution, duration, count } = state;
+  const isVideo = mode !== "image";
+  const aspects = isVideo ? VIDEO_ASPECTS : ASPECTS;
+  const showMore = !isVideo;
+
+  return e2("div", { className: "dockSettingsGrid" },
+    // Aspect ratio
+    e2(Group, { label: "Ratio" },
+      e2("div", { className: "chipList" },
+        aspects.map((r) =>
+          e2("button", {
+            key: r, type: "button",
+            className: `chip ${aspectRatio === r ? "active" : ""}`,
+            "aria-pressed": aspectRatio === r,
+            onClick: () => set({ aspectRatio: r }),
+          }, r)
+        ),
+        showMore && e2("select", {
+          className: `chipSelect ${ASPECTS_MORE.includes(aspectRatio) ? "active" : ""}`,
+          "aria-label": "More aspect ratios",
+          value: ASPECTS_MORE.includes(aspectRatio) ? aspectRatio : "",
+          onChange: (ev) => ev.target.value && set({ aspectRatio: ev.target.value }),
+        },
+          e2("option", { value: "" }, "More"),
+          ASPECTS_MORE.map((r) => e2("option", { key: r, value: r }, r))
+        )
+      )
+    ),
+    // Model (image) / Duration (video)
+    isVideo
+      ? e2(Group, { label: "Duration" },
+          e2("div", { className: "durationStepper", role: "group", "aria-label": "Video duration" },
+            e2("button", { type: "button", "aria-label": "Decrease", disabled: duration <= 2, onClick: () => set({ duration: Math.max(2, duration - 1) }) }, "–"),
+            e2("output", null, `${duration}s`),
+            e2("button", { type: "button", "aria-label": "Increase", disabled: duration >= 10, onClick: () => set({ duration: Math.min(10, duration + 1) }) }, "+")
+          )
+        )
+      : e2(Group, { label: "Model" },
+          e2(Segmented, { options: IMAGE_MODELS, value: imageModel, onChange: (v) => set({ imageModel: v }) })
+        ),
+    // Resolution
+    e2(Group, { label: "Resolution" },
+      isVideo
+        ? e2(Segmented, { options: ["480P", "720P"], value: videoResolution, onChange: (v) => set({ videoResolution: v }) })
+        : e2(Segmented, { options: ["1K", "2K"], value: resolution, onChange: (v) => set({ resolution: v }) })
+    ),
+    // Count (image only)
+    !isVideo && e2(Group, { label: "Images" },
+      e2(Segmented, { options: [1, 2, 3, 4], value: count, onChange: (v) => set({ count: v }) })
+    )
+  );
+}
+
+/* A compact, human summary of the current config, e.g. "16:9 · Quality · 2K · ×2". */
+function settingsSummary(state) {
+  const isVideo = state.mode !== "image";
+  const parts = [state.aspectRatio];
+  if (isVideo) {
+    parts.push(state.videoResolution, `${state.duration}s`);
+  } else {
+    const model = IMAGE_MODELS.find((m) => m.id === state.imageModel);
+    parts.push(model ? model.label : "Normal", state.resolution, `×${state.count}`);
+  }
+  return parts;
+}
+
+/* Rough estimated cost in USD for the cost hint / dock usage. */
+function estimateCost(state) {
+  const isVideo = state.mode !== "image";
+  if (isVideo) {
+    const base = state.videoResolution === "720P" ? 0.18 : 0.1;
+    return base * state.duration;
+  }
+  const base = state.imageModel.includes("quality") ? 0.08 : 0.04;
+  const res = state.resolution === "2K" ? 1.6 : 1;
+  return base * res * state.count;
+}
+
+Object.assign(window, { SettingsControls, settingsSummary, estimateCost, IMAGE_MODELS, ASPECTS, VIDEO_ASPECTS });
+
+    </script>
+    <!-- TopBar.jsx -->
+    <script>
+/* Top status/navigation bar — wordmark, status pill, estimated usage, theme. */
+const { createElement: e3 } = React;
+
+function TopBar({ totalCost, outputs, dark, onToggleTheme }) {
+  return e3("header", { className: "hero" },
+    e3("div", { className: "heroTitle" },
+      e3("div", { className: "heroWordmark" }, "Grok Media Studio"),
+      e3("div", { className: "heroSub" }, "Local generation console · images & video")
+    ),
+    e3("div", { className: "heroActions" },
+      e3("button", { type: "button", className: "barPill", title: "Extension ready" },
+        e3("span", { className: "statusDot" }),
+        e3("span", { className: "barPillLabel" }, "Ready")
+      ),
+      e3("button", { type: "button", className: "usageWidget", title: "Estimated usage this window" },
+        e3("div", { className: "usageCost" },
+          e3("span", { className: "usageCostLabel" }, "Est. usage"),
+          e3("span", { className: "usageCostValue" }, `$${totalCost.toFixed(2)}`)
+        ),
+        e3("div", { className: "usageDivider" }),
+        e3("div", { className: "usageOutputs" },
+          e3("span", { className: "usageOutputsValue" }, String(outputs)),
+          e3("span", { className: "usageOutputsLabel" }, "Outputs")
+        )
+      ),
+      e3("button", {
+        type: "button", className: "barPill icon-only",
+        style: { width: 36, minHeight: 36 },
+        onClick: onToggleTheme,
+        "aria-label": dark ? "Light theme" : "Dark theme",
+        title: dark ? "Light theme" : "Dark theme",
+      }, dark ? e3(Icon.Sun, { size: 14 }) : e3(Icon.Moon, { size: 14 }))
+    )
+  );
+}
+
+Object.assign(window, { TopBar });
+
+    </script>
+    <!-- Composer.jsx -->
+    <script>
+/* Full (enhanced) composer: mode header, settings strip, prompt panel with inline
+   reference rail, generate bar, and the live job queue. */
+const { createElement: e4, useState: useState4 } = React;
+
+const MODES = [
+  { id: "image", label: "Image" },
+  { id: "image-to-video", label: "Image to video" },
+  { id: "reference-to-video", label: "Reference to video" },
+];
+const MODE_LABELS = { "edit-video": "Edit video", "extend-video": "Extend video" };
+
+function ModeSelector({ mode, set, compact }) {
+  return e4("div", { className: "modeSelector", "aria-label": "Output type" },
+    MODES.map((m) =>
+      e4("button", {
+        key: m.id, type: "button",
+        className: `chip modeChip ${mode === m.id ? "active" : ""}`,
+        "aria-pressed": mode === m.id,
+        onClick: () => set({ mode: m.id }),
+      }, modeIcon(m.id), !compact && e4("span", null, m.label))
+    )
+  );
+}
+
+function ReferenceRail({ refs, mode, onRemove }) {
+  if (!refs.length) return null;
+  const showOrdinals = mode === "reference-to-video" && refs.length > 1;
+  return e4("div", { className: "referenceList", "aria-label": "Selected references" },
+    e4("div", { className: "referenceRail" },
+      refs.map((r, i) =>
+        e4("div", { className: "referenceTile", key: r.path, title: r.name },
+          showOrdinals && e4("span", { className: "referenceOrdinal" }, `<IMAGE_${i + 1}>`),
+          e4("img", { src: r.url, alt: r.name }),
+          e4("button", {
+            type: "button", className: "referenceRemove icon-only",
+            "aria-label": `Remove reference ${i + 1}`,
+            onClick: (ev) => { ev.stopPropagation(); onRemove(r.path); },
+          }, e4(Icon.X, { size: 12 }))
+        )
+      )
+    )
+  );
+}
+
+function ReferenceLibrary({ saved, refs, onAdd, onClose }) {
+  return e4("div", { className: "referenceLibrary", role: "dialog", "aria-label": "Saved references" },
+    e4("div", { className: "referenceLibraryTop" },
+      e4("strong", null, "Saved references"),
+      e4("div", { style: { display: "flex", gap: 6 } },
+        e4("button", { type: "button", style: { minHeight: 32, padding: "4px 10px", fontSize: 12 } }, e4(Icon.Upload, { size: 13 }), " Upload"),
+        e4("button", { type: "button", style: { minHeight: 32, padding: "4px 10px", fontSize: 12 }, onClick: onClose }, e4(Icon.X, { size: 13 }))
+      )
+    ),
+    e4("div", { className: "savedGrid" },
+      saved.map((s) => {
+        const used = refs.some((r) => r.path === s.path);
+        return e4("div", {
+          key: s.path, role: "button", tabIndex: used ? -1 : 0,
+          className: `savedTile ${used ? "disabled" : ""}`,
+          title: s.name,
+          onClick: () => !used && onAdd(s),
+        },
+          e4("div", { className: "thumb" }, e4("img", { src: s.url, alt: s.name })),
+          e4("span", { className: "nm" }, s.name),
+          e4("span", { className: "mt" }, s.role === "used" ? `used ${s.uses}x` : "upload")
+        );
+      })
+    )
+  );
+}
+
+function Composer({ state, set, refs, saved, addRef, removeRef, onGenerate, busy, jobs }) {
+  const [libOpen, setLibOpen] = useState4(false);
+  const isVideo = state.mode !== "image";
+  const hiddenMode = state.mode === "edit-video" || state.mode === "extend-video";
+  const cost = estimateCost(state);
+  const maxRefs = state.mode === "image" ? 3 : 6;
+
+  return e4("section", { className: "panel composer", id: "full-composer" },
+    // header
+    e4("div", { className: "composerHeader" },
+      e4(ModeSelector, { mode: state.mode, set }),
+      hiddenMode && e4("div", { className: "modeNotice", role: "status" },
+        e4("span", { className: "modeNoticeLabel" }, modeIcon(state.mode), MODE_LABELS[state.mode]),
+        e4("button", { type: "button", className: "modeExit", onClick: () => set({ mode: "image" }) }, e4(Icon.X, { size: 12 }), " Exit to Image")
+      )
+    ),
+    // settings strip
+    e4("div", { className: "settingsStrip" }, e4(SettingsControls, { state, set })),
+    // prompt panel
+    e4("div", { className: "promptPanel" },
+      e4("div", { className: "promptLabelRow" },
+        e4("span", { className: "label" }, "Prompt"),
+        refs.length > 0 && e4("button", { type: "button", style: { minHeight: 28, padding: "3px 10px", fontSize: 12 }, onClick: () => refs.forEach((r) => removeRef(r.path)) }, "Clear")
+      ),
+      e4("div", { className: `promptShell ${refs.length ? "hasRefs" : ""}` },
+        e4("textarea", {
+          value: state.prompt,
+          placeholder: "Describe the media you want to generate in detail…",
+          onChange: (ev) => set({ prompt: ev.target.value }),
+        }),
+        e4(ReferenceRail, { refs, mode: state.mode, onRemove: removeRef })
+      ),
+      e4("div", { className: "promptToolbar" },
+        e4("div", { className: "promptToolbarLeft" },
+          e4("button", {
+            type: "button", className: "attachButton",
+            "aria-expanded": libOpen,
+            onClick: () => setLibOpen((o) => !o),
+          }, e4(Icon.Link, { size: 15 }), " Add Reference",
+            refs.length > 0 && e4("span", null, state.mode === "image" ? `${refs.length}/${maxRefs}` : String(refs.length))
+          ),
+          libOpen && e4(ReferenceLibrary, { saved, refs, onAdd: (s) => { addRef(s); setLibOpen(false); }, onClose: () => setLibOpen(false) }),
+          e4("button", { type: "button" }, e4(Icon.Upload, { size: 15 }), " Upload")
+        ),
+        e4("div", { className: "promptToolbarRight" },
+          e4("span", { className: "costHint", title: "Estimated cost for this run" }, "≈ ", e4("b", null, `$${cost.toFixed(2)}`)),
+          e4("button", {
+            type: "button", className: "primary generateButton",
+            disabled: busy || !state.prompt.trim(),
+            onClick: onGenerate,
+            title: !state.prompt.trim() ? "Enter a prompt" : "Generate",
+          }, e4(Icon.Sparkles, { size: 16 }), busy ? "Working…" : isVideo ? "Generate video" : "Generate")
+        )
+      )
+    ),
+    // queue
+    jobs.length > 0 && e4("div", { className: "queuePanel", "aria-label": "Generation queue" },
+      e4("div", { className: "queueHeader" },
+        e4("h2", null, "Active queue"),
+        e4("span", null, `${jobs.length} active`)
+      ),
+      jobs.map((j) =>
+        e4("div", { key: j.id, className: `queueJob ${j.status}` },
+          e4("div", { className: "queueJobTitle" },
+            e4("span", { className: "queueKind" }, j.kind),
+            e4("strong", null, j.label)
+          ),
+          e4("div", { className: "queueJobMeta" },
+            e4("span", { className: "spinner" }),
+            e4("span", null, j.status)
+          )
+        )
+      )
+    )
+  );
+}
+
+Object.assign(window, { Composer, MODES, MODE_LABELS });
+
+    </script>
+    <!-- StickyComposer.jsx -->
+    <script>
+/* Enhanced sticky composer (dock). Unlike a bare collapsed input, this carries the
+   full composer state forward: active mode, reference thumbnails, a live settings
+   SUMMARY (ratio · model · resolution · count/duration) that expands to the full
+   controls, estimated usage, and Generate. */
+const { createElement: e5, useState: useState5 } = React;
+
+function DockSettingsPopover({ state, set, onClose }) {
+  return e5("div", { className: "dockSettingsPop", role: "dialog", "aria-label": "Generation settings" },
+    e5("div", { className: "popHeader" },
+      e5("strong", null, "Generation settings"),
+      e5("button", { type: "button", className: "icon-only", style: { width: 32, height: 32, minHeight: 32 }, onClick: onClose, "aria-label": "Close" }, e5(Icon.X, { size: 14 }))
+    ),
+    e5(SettingsControls, { state, set })
+  );
+}
+
+function StickyComposer({ visible, state, set, refs, onGenerate, busy, onExpand }) {
+  const [settingsOpen, setSettingsOpen] = useState5(false);
+  const isVideo = state.mode !== "image";
+  const cost = estimateCost(state);
+  const summary = settingsSummary(state);
+  const showOrdinals = state.mode === "reference-to-video" && refs.length > 1;
+
+  return e5("div", { className: `dock ${visible ? "visible" : ""}`, "aria-hidden": !visible },
+    e5("div", { className: "dockBar" },
+      // compact mode segmented (icon only)
+      e5("div", { className: "dockModes", "aria-label": "Output type" },
+        MODES.map((m) =>
+          e5("button", {
+            key: m.id, type: "button",
+            className: `dockMode ${state.mode === m.id ? "active" : ""}`,
+            "aria-pressed": state.mode === m.id, title: m.label,
+            tabIndex: visible ? 0 : -1,
+            onClick: () => set({ mode: m.id }),
+          }, modeIcon(m.id))
+        )
+      ),
+      // reference mini-thumbs carried forward
+      refs.length > 0 && e5("div", { className: "dockRefs", title: `${refs.length} reference${refs.length === 1 ? "" : "s"}` },
+        refs.slice(0, 3).map((r, i) =>
+          e5("div", { className: "dockRefThumb", key: r.path },
+            showOrdinals && e5("span", { className: "ord" }, i + 1),
+            e5("img", { src: r.url, alt: r.name })
+          )
+        ),
+        refs.length > 3 && e5("span", { className: "dockRefMore" }, `+${refs.length - 3}`)
+      ),
+      // prompt input
+      e5("div", { className: "dockField" },
+        e5("input", {
+          type: "text", className: "dockInput", value: state.prompt,
+          placeholder: "Describe what to generate…", "aria-label": "Prompt",
+          tabIndex: visible ? 0 : -1,
+          onChange: (ev) => set({ prompt: ev.target.value }),
+          onKeyDown: (ev) => { if (ev.key === "Enter" && !busy && state.prompt.trim()) onGenerate(); },
+        })
+      ),
+      // live settings summary -> opens full controls
+      e5("div", { style: { position: "relative", flex: "0 0 auto" } },
+        e5("button", {
+          type: "button", className: "dockSummary",
+          "aria-expanded": settingsOpen, tabIndex: visible ? 0 : -1,
+          title: "Generation settings",
+          onClick: () => setSettingsOpen((o) => !o),
+        },
+          e5(Icon.Sliders, { size: 14 }),
+          e5("span", { className: "summaryFull" },
+            summary.map((s, i) => [
+              i > 0 && e5("span", { className: "sep", key: `s${i}` }, " · "),
+              e5("span", { className: "val", key: `v${i}` }, s),
+            ])
+          ),
+          e5(settingsOpen ? Icon.ChevronUp : Icon.ChevronDown, { size: 13 })
+        ),
+        settingsOpen && e5(DockSettingsPopover, { state, set, onClose: () => setSettingsOpen(false) })
+      ),
+      // estimated usage mini
+      e5("div", { className: "dockUsage", title: "Estimated cost for this run" },
+        e5("span", { className: "dockUsageVal" }, `$${cost.toFixed(2)}`),
+        e5("span", { className: "dockUsageLabel" }, "Est.")
+      ),
+      // generate
+      e5("button", {
+        type: "button", className: "primary dockGenerate",
+        disabled: busy || !state.prompt.trim(), tabIndex: visible ? 0 : -1,
+        onClick: onGenerate,
+        title: !state.prompt.trim() ? "Enter a prompt" : "Generate",
+      }, e5(Icon.Sparkles, { size: 15 }), busy ? "Working…" : isVideo ? "Generate" : "Generate"),
+      // expand back to full composer
+      e5("button", {
+        type: "button", className: "icon-only dockExpand",
+        tabIndex: visible ? 0 : -1, "aria-label": "Open full composer", title: "Open full composer",
+        onClick: onExpand,
+      }, e5(Icon.ChevronUp, { size: 15 }))
+    )
+  );
+}
+
+Object.assign(window, { StickyComposer });
+
+    </script>
+    <!-- Gallery.jsx -->
+    <script>
+/* Gallery toolbar + dense media grid. Media-first, minimal tile chrome. */
+const { createElement: e6, useState: useState6 } = React;
+
+const AR_MAP = { "16:9": "16/9", "9:16": "9/16", "1:1": "1/1", "4:3": "4/3", "3:4": "3/4", "2:3": "2/3", "3:2": "3/2", "2:1": "2/1", "1:2": "1/2", auto: "1/1" };
+
+function Gallery({ items }) {
+  const [kind, setKind] = useState6("all");
+  const [query, setQuery] = useState6("");
+  const [sort, setSort] = useState6("newest");
+
+  let shown = items.filter((it) => (kind === "all" ? true : it.kind === kind));
+  if (query.trim()) {
+    const q = query.toLowerCase();
+    shown = shown.filter((it) => it.prompt.toLowerCase().includes(q) || (it.name || "").toLowerCase().includes(q));
+  }
+  if (sort === "oldest") shown = [...shown].reverse();
+
+  return e6(React.Fragment, null,
+    e6("section", { className: "toolbar" },
+      e6("div", { className: "toolbarFilters" },
+        e6("span", { className: "toolbarLabel" }, "Gallery"),
+        e6("div", { className: "tabGroup", "aria-label": "Media types" },
+          [{ id: "all", label: "All" }, { id: "image", label: "Images" }, { id: "video", label: "Videos" }].map((o) =>
+            e6("button", { key: o.id, type: "button", className: `tabBtn ${kind === o.id ? "active" : ""}`, "aria-pressed": kind === o.id, onClick: () => setKind(o.id) }, o.label)
+          )
+        ),
+        e6("span", { className: "countPill" }, shown.length, e6("small", null, `of ${items.length}`))
+      ),
+      e6("div", { className: "toolbarRight" },
+        e6("div", { className: "tabGroup" },
+          [{ id: "newest", label: "Newest" }, { id: "oldest", label: "Oldest" }].map((s) =>
+            e6("button", { key: s.id, type: "button", className: `chip ${sort === s.id ? "active" : ""}`, onClick: () => setSort(s.id) }, s.label)
+          )
+        ),
+        e6("input", { className: "searchInput", placeholder: "Search results, prompts, paths…", value: query, onChange: (ev) => setQuery(ev.target.value) })
+      )
+    ),
+    e6("div", { className: "galleryGrid" },
+      shown.map((it) =>
+        e6("div", { key: it.id, className: "mediaTile", style: { "--ar": AR_MAP[it.ratio] || "1/1" } },
+          e6("img", { className: "media", src: it.url, alt: it.prompt, loading: "lazy" }),
+          e6("span", { className: "mediaKindBadge" }, it.kind === "video" ? e6(Icon.Play, { size: 10 }) : e6(Icon.Image, { size: 10 }), it.kind),
+          e6("div", { className: "mediaCaption" },
+            e6("span", null, it.prompt),
+            e6("span", { className: "ratio" }, `${it.ratio} · ${it.kind === "video" ? it.res + " · " + it.dur + "s" : it.res}`)
+          )
+        )
+      )
+    )
+  );
+}
+
+Object.assign(window, { Gallery });
+
+    </script>
+    <!-- App.jsx -->
+    <script>
+/* App orchestrator: holds composer state, swaps full composer <-> sticky dock on
+   scroll, runs a fake generate flow into the gallery. */
+const { createElement: c, useState, useRef, useEffect, useCallback } = React;
+
+const A = "assets/media";
+const M = (n) => `${A}/m${n}.jpg`;
+
+const SEED_GALLERY = [
+  { id: "g1", kind: "image", ratio: "16:9", res: "2K", url: M(1), prompt: "Desert horizon at golden hour, volumetric haze" },
+  { id: "g2", kind: "image", ratio: "1:1", res: "1K", url: M(2), prompt: "Macro study of teal mineral, soft studio light" },
+  { id: "g3", kind: "video", ratio: "9:16", res: "720P", dur: 6, url: M(3), prompt: "Vertical drift through emerald canopy, slow dolly" },
+  { id: "g4", kind: "image", ratio: "4:3", res: "2K", url: M(4), prompt: "Quiet interior, warm rim light across a wall" },
+  { id: "g5", kind: "image", ratio: "3:4", res: "1K", url: M(5), prompt: "Portrait of mauve smoke against deep shadow" },
+  { id: "g6", kind: "video", ratio: "16:9", res: "480P", dur: 4, url: M(6), prompt: "Graphite landscape, fog rolling left to right" },
+  { id: "g7", kind: "image", ratio: "1:1", res: "2K", url: M(7), prompt: "Sunset bloom over dark water, long exposure" },
+  { id: "g8", kind: "image", ratio: "3:2", res: "2K", url: M(8), prompt: "Cinematic teal interior, anamorphic flare" },
+  { id: "g9", kind: "video", ratio: "9:16", res: "720P", dur: 8, url: M(9), prompt: "Forest light shafts, gentle parallax pan" },
+  { id: "g10", kind: "image", ratio: "1:1", res: "1K", url: M(10), prompt: "Amber dust suspended in a single beam" },
+  { id: "g11", kind: "image", ratio: "16:9", res: "2K", url: M(11), prompt: "Mauve dunes under a low violet sky" },
+  { id: "g12", kind: "image", ratio: "4:3", res: "1K", url: M(12), prompt: "Soft graphite gradient, fine film grain" },
+];
+
+const SEED_SAVED = [
+  { path: `${A}/ref1.jpg`, url: `${A}/ref1.jpg`, name: "ref-dusk-01.jpg", role: "used", uses: 3, kind: "image" },
+  { path: `${A}/ref2.jpg`, url: `${A}/ref2.jpg`, name: "ref-green-02.jpg", role: "used", uses: 1, kind: "image" },
+  { path: `${A}/ref3.jpg`, url: `${A}/ref3.jpg`, name: "ref-blue-03.jpg", role: "upload", kind: "image" },
+  { path: `${A}/ref4.jpg`, url: `${A}/ref4.jpg`, name: "ref-mauve-04.jpg", role: "upload", kind: "image" },
+  { path: `${A}/ref5.jpg`, url: `${A}/ref5.jpg`, name: "ref-graphite-05.jpg", role: "used", uses: 2, kind: "image" },
+];
+
+function App() {
+  const [state, setState] = useState({
+    mode: "image",
+    prompt: "A lone figure on a dune ridge at golden hour, volumetric light, cinematic",
+    aspectRatio: "16:9",
+    imageModel: "grok-imagine-image-quality",
+    resolution: "2K",
+    videoResolution: "720P",
+    duration: 6,
+    count: 2,
+  });
+  const set = useCallback((patch) => setState((s) => ({ ...s, ...patch })), []);
+
+  const [refs, setRefs] = useState([SEED_SAVED[0]]);
+  const addRef = useCallback((r) => setRefs((cur) => (cur.some((x) => x.path === r.path) ? cur : [...cur, r])), []);
+  const removeRef = useCallback((path) => setRefs((cur) => cur.filter((x) => x.path !== path)), []);
+
+  const [jobs, setJobs] = useState([]);
+  const [gallery, setGallery] = useState(SEED_GALLERY);
+  const [busy, setBusy] = useState(false);
+  const [cost, setCost] = useState(4.86);
+  const [outputs, setOutputs] = useState(SEED_GALLERY.length);
+
+  const [dark, setDark] = useState(true);
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  }, [dark]);
+
+  // dock visibility: show when the full composer has scrolled out of view
+  const composerRef = useRef(null);
+  const [docked, setDocked] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.getElementById("full-composer");
+      if (!el) return;
+      const bottom = el.getBoundingClientRect().bottom;
+      setDocked(bottom < 96);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); };
+  }, []);
+
+  const generate = useCallback(() => {
+    if (busy || !state.prompt.trim()) return;
+    const isVideo = state.mode !== "image";
+    const n = isVideo ? 1 : state.count;
+    const runCost = estimateCost(state);
+    setBusy(true);
+    const job = { id: `j${Date.now()}`, kind: isVideo ? "video" : "image", status: "running", label: state.prompt.slice(0, 48) };
+    setJobs([job]);
+    setTimeout(() => {
+      const ratio = state.aspectRatio === "auto" ? "1:1" : state.aspectRatio;
+      const made = Array.from({ length: n }).map((_, i) => ({
+        id: `${job.id}-${i}`, kind: isVideo ? "video" : "image", ratio,
+        res: isVideo ? state.videoResolution : state.resolution,
+        dur: state.duration, url: M(((Date.now() + i) % 12) + 1), prompt: state.prompt,
+      }));
+      setGallery((g) => [...made, ...g]);
+      setOutputs((o) => o + n);
+      setCost((cc) => +(cc + runCost).toFixed(2));
+      setJobs([]);
+      setBusy(false);
+    }, 2200);
+  }, [busy, state]);
+
+  const expandComposer = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  return c(React.Fragment, null,
+    c(TopBar, { totalCost: cost, outputs, dark, onToggleTheme: () => setDark((d) => !d) }),
+    c(StickyComposer, { visible: docked, state, set, refs, onGenerate: generate, busy, onExpand: expandComposer }),
+    c("div", { className: "app" },
+      c("div", { ref: composerRef },
+        c(Composer, { state, set, refs, saved: SEED_SAVED, addRef, removeRef, onGenerate: generate, busy, jobs })
+      ),
+      c(Gallery, { items: gallery })
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(c(App));
+
+    </script>
+  </body>
+</html>
