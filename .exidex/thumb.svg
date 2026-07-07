@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="liverics — live lyrics for the music you're already playing">
+  <rect width="1200" height="675" fill="#101014"/>
+  <!-- faint waveform baseline -->
+  <g stroke="#2A2A33" stroke-width="3" stroke-linecap="round">
+    <line x1="90" y1="470" x2="90" y2="500"/><line x1="120" y1="455" x2="120" y2="515"/>
+    <line x1="150" y1="440" x2="150" y2="530"/><line x1="180" y1="460" x2="180" y2="510"/>
+    <line x1="210" y1="430" x2="210" y2="540"/><line x1="240" y1="465" x2="240" y2="505"/>
+    <line x1="270" y1="445" x2="270" y2="525"/><line x1="300" y1="475" x2="300" y2="495"/>
+  </g>
+  <!-- karaoke-style lyric lines: past, current (accent), next -->
+  <text x="90" y="220" font-family="Georgia, 'Times New Roman', serif" font-size="44" fill="#4A4A55">and the words arrive</text>
+  <text x="90" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="60" font-style="italic" fill="#B62AD9">right as she sings them —</text>
+  <text x="90" y="380" font-family="Georgia, 'Times New Roman', serif" font-size="44" fill="#4A4A55">no tab, no search, no lag</text>
+  <!-- wordmark -->
+  <text x="90" y="590" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="30" letter-spacing="6" fill="#E8E8EE">LIVERICS</text>
+  <text x="330" y="590" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="22" fill="#6E6E7A">subtitles for what you're already playing</text>
+  <circle cx="1110" cy="581" r="9" fill="#B62AD9"/>
+</svg>
