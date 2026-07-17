@@ -4,7 +4,7 @@
   "tagline": "Live lyrics, like subtitles, for the music you're already playing.",
   "kind": "landing",
   "repo": "https://github.com/AlqattanDev/liverics",
-  "thumb": "/liverics/thumb.svg",
+  "thumb": "/liverics/thumb.png",
   "accent": "#B62AD9",
   "order": 30,
   "hidden": false,
